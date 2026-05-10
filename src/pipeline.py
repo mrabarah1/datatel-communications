@@ -35,8 +35,8 @@ def execute_sql_file(file_path, client):
     p_id = os.getenv("GCP_PROJECT_ID")
     d_id = os.getenv("BQ_DATASET_ID")
         
-    sql = sql.replace("{{PROJECT_ID}}", p_id)
-    sql = sql.replace("{{DATASET_ID}}", d_id)
+    sql = sql.replace("{PROJECT_ID}", str(p_id))
+    sql = sql.replace("{DATASET_ID}", str(d_id))
     
     print(f"DEBUG: First 50 chars of processed SQL: {sql[:50]}...")
     
@@ -99,7 +99,7 @@ def run_pipeline():
         execute_sql_file(task, BQ_CLIENT)
 
     # STEP 4: WAREHOUSE
-    print("🏗️ Starting Stage 4: Warehouse...")
+    print("Starting Stage 4: Warehouse...")
     execute_sql_file("sql/warehouse/dw_user_analytics.sql", BQ_CLIENT)
     
     print("Pipeline execution completed successfully!")

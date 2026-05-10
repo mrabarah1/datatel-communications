@@ -14,7 +14,7 @@
         transaction_id, 
         customer_id, 
         COALESCE(amount, 0) as amount, 
-        CAST(transaction_date AS TIMESTAMP) as transaction_ts
+        CAST(transaction_date AS TIMESTAMP) as transaction_date
     FROM dedupped 
     WHERE rn = 1;
     

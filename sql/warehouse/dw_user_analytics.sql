@@ -9,7 +9,7 @@
 CREATE OR REPLACE TABLE `{PROJECT_ID}.{DATASET_ID}.dw_user_analytics` AS
 SELECT
     c.customer_id,
-    c.name AS customer_name,
+    c.customer_name,
     c.email,
     c.country,
     COALESCE(r.total_revenue, 0) AS total_revenue,

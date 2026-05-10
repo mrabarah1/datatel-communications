@@ -35,6 +35,5 @@ def load_csv_to_postgres():
         print(f"{table} loaded successfully")
         
         
-# if __name__ == "__main__":
-#     load_csv_to_postgres()
+
             
