@@ -1,0 +1,10 @@
+pandas
+numpy
+faker
+tqdm
+psycopg2-binary
+google-cloud-bigquery
+python-dotenv
+sqlalchemy
+pyarrow
+pandas-gbq
