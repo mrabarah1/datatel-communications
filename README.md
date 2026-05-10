@@ -112,6 +112,10 @@ To extend this project, consider:
 - parameterizing table names and query paths for increased flexibility
 - adding automated tests for ingestion and SQL execution
 
-## License
 
-This repository does not include a license file. Add one if you intend to share or distribute the project.
+## Acknowledgments
+- This project was developed as a technical milestone for the AltSchool Africa Data Engineering Program.
+
+- Business Context & Requirements: Provided by AltSchool Africa.
+
+- Implementation & Pipeline Architecture: Developed by Emeka Lawrence Abarah.
