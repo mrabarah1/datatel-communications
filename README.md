@@ -76,7 +76,77 @@ GCP_PROJECT_ID=your_gcp_project_id
 BQ_DATASET_ID=your_bigquery_dataset
 ```
 
-## Running the Pipeline
+**Important:** The `PG_HOST` value depends on how you're running the pipeline:
+
+- **For Docker Compose**: Use `PG_HOST=host.docker.internal` to allow the container to access PostgreSQL on your host machine
+- **For Local Execution** (without Docker): Use `PG_HOST=localhost` to connect to PostgreSQL running locally
+
+## Docker Setup
+
+### docker-compose.yml
+
+The project includes a `docker-compose.yml` file for containerized execution:
+
+```yaml
+version: "3.8"
+
+services:
+  pipeline:
+    build: .
+    volumes:
+      - .:/app
+      - ${HOME}/.config/gcloud/application_default_credentials.json:/tmp/keys/google_creds.json:ro
+    env_file:
+      - .env
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/tmp/keys/google_creds.json
+      - PYTHONUNBUFFERED=1
+```
+
+### Running with Docker Compose
+
+To run the datatel-pipeline using Docker Compose:
+
+1. **Ensure your `.env` file is configured** (see Configuration section above)
+
+2. **Make sure Google Cloud credentials are available**:
+
+   ```bash
+   # Ensure your Google Cloud credentials are in the default location
+   ~/.config/gcloud/application_default_credentials.json
+   ```
+
+3. **Build and run the container**:
+
+   ```bash
+   docker compose up --build
+   ```
+
+   Or, to run in detached mode:
+
+   ```bash
+   docker compose up -d --build
+   ```
+
+4. **View logs** (if running in detached mode):
+
+   ```bash
+   docker compose logs -f
+   ```
+
+5. **Stop the container**:
+   ```bash
+   docker compose down
+   ```
+
+The Docker container will:
+
+- Mount your current directory as `/app` inside the container
+- Load environment variables from `.env`
+- Mount your Google Cloud credentials for BigQuery access
+- Run the pipeline automatically with full Python output buffering disabled for real-time logs
+
+## Running the Pipeline Locally without docker
 
 From the repository root, run:
 
@@ -112,8 +182,8 @@ To extend this project, consider:
 - parameterizing table names and query paths for increased flexibility
 - adding automated tests for ingestion and SQL execution
 
-
 ## Acknowledgments
+
 - This project was developed as a technical milestone for the AltSchool Africa Data Engineering Program.
 
 - Business Context & Requirements: Provided by AltSchool Africa.
