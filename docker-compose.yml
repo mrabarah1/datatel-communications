@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  pipeline:
+    build: .
+    volumes:
+      - .:/app
+      - ${HOME}/.config/gcloud/application_default_credentials.json:/tmp/keys/google_creds.json:ro
+    env_file:
+      - .env
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/tmp/keys/google_creds.json
+      - PYTHONUNBUFFERED=1
