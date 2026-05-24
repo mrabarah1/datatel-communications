@@ -24,7 +24,7 @@ Activate the virtual environment:
 - mac/linux: `source venv/bin/activate`
 - windows: `.\venv\scripts\activate`
 
-- Generate Source Data: Run python `src/generate_data.py` to populate the src/ folder with the necessary CSV files. or open a src folder > and a file called `generate_data.py` then paste this link: '`ttps://drive.google.com/file/d/13m70i4jkBtsfn5xN7g-35FkU4AIJx3qc/view?usp=sharing` to generate raw CSV data
+- Generate Source Data: Open a src folder > and a file called `generate_data.py` then paste this link: '`https://drive.google.com/file/d/13m70i4jkBtsfn5xN7g-35FkU4AIJx3qc/view?usp=sharing` to generate raw CSV data
 
 ## Repository Structure
 

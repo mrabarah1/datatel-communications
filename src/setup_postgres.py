@@ -23,14 +23,17 @@ def load_csv_to_postgres():
         "src_billing_transactions":"src/src_billing_transactions.csv",
         "src_network_sessions":"src/src_network_sessions.csv"
     }
-    
+    []
     for table, file in files.items():
         print(f"Loading {file} to {table}...")
+        # Extracts raw data from CSV
         df = pd.read_csv(file)
         
+        # Performs a tiny transformation to ensure date fields are in string format for PostgreSQL
         if 'transaction_date' in df.columns:
             df['transaction_date'] = df['transaction_date'].astype(str)
-            
+        
+        # Loads the extracted data directly into PostgreSQL    
         df.to_sql(table, engine, if_exists='replace', index=False)
         print(f"{table} loaded successfully")
         

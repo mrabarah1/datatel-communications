@@ -63,30 +63,35 @@ def run_pipeline():
     
     #Use context manager to ensure connection is closed after operations
     with engine.connect() as conn:
-    
+        
+        #loops through my postgres table and pulls the data into pandas df
         for table in tables:
+            # Extract validated data out of PostgreSQL using pandas
             df = pd.read_sql(f"SELECT * FROM {table}", conn)
-            # Load raw dataset in BigQuery
             
+            # Streams and loads the data into BigQuery
             destination_table = f"{PROJECT_ID}.{DATASET_ID}.{table}"
             job_config = bigquery.LoadJobConfig(write_disposition="WRITE_TRUNCATE", autodetect=True)
             job = BQ_CLIENT.load_table_from_dataframe(df, destination_table, job_config=job_config)
             job.result()  # Wait for the job to complete
             print(f"Loaded {table} to BigQuery successfully.")
-        
+    
+    # staging and transformation steps will be executed directly in BigQuery using SQL files
     print("Starting Stage 2: Staging...")
+    # List of staging SQL files to be executed in order
     staging_tasks = [
        "sql/staging/stg_billing.sql",
        "sql/staging/stg_sessions.sql",
        "sql/staging/stg_customers.sql"
     ]
-    
+    # Executes each staging SQL file sequentially on BigQuery
     for task in staging_tasks:
         execute_sql_file(task, BQ_CLIENT)
    
     
-    # STEP 3: TRANSFORMATIONS
+    #  TRANSFORMATIONS
     print("Starting Stage 3: Transformations...")
+    # List of transformation SQL files to be executed in order
     transform_tasks = [
         "sql/transformations/agg_user_revenue.sql",
         "sql/transformations/agg_user_usage.sql",
@@ -95,11 +100,13 @@ def run_pipeline():
         "sql/transformations/session_buckets.sql",
         "sql/transformations/agg_session_distribution.sql"
     ]
+    # Executes each transformation SQL file sequentially on BigQuery
     for task in transform_tasks:
         execute_sql_file(task, BQ_CLIENT)
 
-    # STEP 4: WAREHOUSE
+    # WAREHOUSE
     print("Starting Stage 4: Warehouse...")
+    # Executes the warehouse SQL file to create the final analytics tables in BigQuery
     execute_sql_file("sql/warehouse/dw_user_analytics.sql", BQ_CLIENT)
     
     print("Pipeline execution completed successfully!")
